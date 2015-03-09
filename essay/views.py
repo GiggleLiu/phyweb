@@ -21,14 +21,14 @@ def topic_list(request,pageindex):
 @csrf_exempt
 def topic_new(request):
     context=RequestContext(request)
-    if not request.user.is_superuser:
+    if not request.user.has_perm('being.can_add_topic'):
         return render_to_response('topic_list.html',{'error':'You Have No Permission to Add a Topic!'},context)
     if request.method=='POST':
         cform=forms.NewTopicForm(data=request.POST)
         if cform.is_valid():
             data=cform.cleaned_data
             newtopic(**data)
-            return HttpResponseRedirect('/topic/')
+            return HttpResponseRedirect('/topic/1/')
     else:
         return render_to_response('topic_new.html',{'form':forms.NewTopicForm},context)
 
@@ -62,6 +62,12 @@ def essay_list(request,tid,pageindex):
     pageindex=int(pageindex)
     essaylist,totalpages=getessaybytopic(tid,pageindex)
     return render_to_response('essay_list.html',{'topic':gettopic(tid),'essaylist':essaylist,'totalpages':totalpages,'pageindex':pageindex},context)
+
+def user_blog(request,uid,pageindex):
+    context=RequestContext(request)
+    pageindex=int(pageindex)
+    essaylist,totalpages=getessaybyuser(uid,pageindex)
+    return render_to_response('essay_list.html',{'essaylist':essaylist,'totalpages':totalpages,'pageindex':pageindex,'targetuser':getuser(uid)},context)
 
 def essay_detail(request,eid):
     context=RequestContext(request)

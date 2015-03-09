@@ -86,6 +86,7 @@ def newuser(username,password,email):
 def deleteuser(uid):
     User.objects.get(pk=uid).delete()
     return True
+
 def updateuser(user,oldpassword,newpassword,email):
     if user.check_password(oldpassword):
         user.email=email
@@ -148,6 +149,9 @@ def initialize():
         newperm('can_edit_essay')
     if not getperm('can_audit_essay'):
         newperm('can_audit_essay')
+    if not getperm('can_add_topic'):
+        newperm('can_add_topic')
+
 
     #init group
     gdefault=getgroup('default')
@@ -168,6 +172,8 @@ def initialize():
         addpermtogroup(gmanager,'can_edit_essay')
     if not ghas_perm(gmanager,'can_audit_essay'):
         addpermtogroup(gmanager,'can_audit_essay')
+    if not ghas_perm(gmanager,'can_add_topic'):
+        addpermtogroup(gmanager,'can_add_topic')
     return True
 
 def getmemberlist():

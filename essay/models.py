@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User,Group,Permission
 import datetime
 from gweb.utils import pagerget
+from being.models import getuser
 
 # Create your models here.
 class Topic(models.Model):
@@ -60,8 +61,12 @@ def updateessay(eid,title=None,content=None):
 def getessay(eid):
     return Essay.objects.get(pk=eid)
 
-def getessaybytopic(topicname,pageindex):
-    el=gettopic(topicname).essay_set.all()
+def getessaybytopic(tid,pageindex):
+    el=gettopic(tid).essay_set.all()
+    return pagerget(el,pageindex)
+
+def getessaybyuser(uid,pageindex):
+    el=getuser(uid).essay_set.all()
     return pagerget(el,pageindex)
 
 def gettopicbyname(topicname):

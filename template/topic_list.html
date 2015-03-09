@@ -18,7 +18,7 @@
         <div class="col-xs-12 col-md-9">
             <div class="panel panel-info">
                 <div class="panel-heading">Topics List
-                    {%if user.is_superuser%}
+                    {%if perms.being.can_add_topic%}
                     <a href="/topic/new/" title="Add a New Topic" class="pull-right">
                         <span class="badge glyphicon glyphicon-plus" aria-hidden="true">Add</span>
                     </a>

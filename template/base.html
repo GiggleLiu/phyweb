@@ -80,6 +80,7 @@
                         <li><a href="{% url 'logout'%}" id="logout">Logout</a></li>
                         {%if not user.is_superuser%}
                         <li><a href="/being/user_detail/{{user.id}}/" target="content">Profile</a></li>
+                        <li><a href="/topic/user_blog/{{user.id}}/1/" target="content">Aiticles</a></li>
                         {%else%}
                         <li><a href="/being/user_manage/" target="content">User Management</a></li>
                         {%endif%}

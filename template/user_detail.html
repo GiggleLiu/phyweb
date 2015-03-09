@@ -20,7 +20,7 @@
         <div class="col-md-9">
             <div class="panel panel-primary" id="panel-right">
                 <div class="panel-heading">
-                    {%ifequal objectbeing.user user%}我{%else%}{%ifequal objectbeing.gender 'male'%}他{%else%}她{%endifequal%}{%endifequal%}的基本资料
+                    {%ifequal objectbeing.user user%}我{%else%}{%ifequal objectbeing.gender 'male'%}他{%else%}她{%endifequal%}{%endifequal%}的基本资料&emsp;<a href="/topic/user_blog/{{user.id}}/1/" class="label label-default">Show My Articles</a>
                     {%ifequal objectbeing.user user%}
                     <span class="badge pull-right"><span class="glyphicon glyphicon-edit"></span><a class="text-primary" data-toggle="modal" href="/being/being_update/" title="修改个人资料。">修改资料</a></span>
                     <span class="badge pull-right" style="margin-right:7px;"><span class="glyphicon glyphicon-edit"></span><a class="text-primary" href="/being/user_update/" title="修改邮箱和密码。">修改账户</a></span>
