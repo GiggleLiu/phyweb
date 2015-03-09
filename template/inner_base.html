@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}内部资料{%endblock%}
+{%block class-nav-inner%}active{%endblock%}
+{%block script%}
+{%endblock%}
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <h1 class="page-title">内部资料</h1>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-sm-3">
+                <ul class="nav nav-pills nav-stacked" id="navbar">
+                    <li class="{%block navfile_class%}{%endblock%}" id=""><a href="/inner/file/">共享文件</a></li>
+                    {%for ctitle in titlelist%}
+                    <li class="{%ifequal ctitle essay.title%}active{%endifequal%}"><a href="/inner/{{ctitle}}/">{{ctitle}}</a></li>
+                    {%endfor%}
+                    {%if perms.being.can_edit_essay%}
+                    <li class="{%block navnew_class%}{%endblock%}" id="">
+                        {%ifequal update None%}
+                        <a href="/essay/new/inner/ckeditor">添加新的主题</a>
+                        {%else%}
+                        <a href="#">* {%if essay%}更新{%else%}编辑新{%endif%}主题中</a></li>
+                        {%endifequal%}
+                        {%endif%}
+                    </li>
+                </ul>
+            </div>
+		    <div class="col-sm-9">
+                {%block innerpage%}
+                {%endblock%}
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

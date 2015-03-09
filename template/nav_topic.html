@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}{{essay}}{%endblock%}
+{%block bodystyle%}background-image:url('{%static 'img/web/bg.jpg'%}'); background-size:cover;{%endblock%}
+{%block script%}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/csshake.min.css'%}">
+{%endblock%}
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <h1 class="page-title shake">{{essay}}</h1>
+        <div class="row" style="margin-top:30px;">
+            <div class="col-md-12">
+                <div class="btn-group pull-right">
+                    {%if user.is_superuser%}
+                    <a class="btn btn-danger" href="/essay/delete/nav/{{essay.title}}"><span class="glyphicon glyphicon-remove"></span>删除</a>
+                    {%endif%}
+                    {%if perms.being.can_edit_essay%}
+                    <a class="btn btn-primary" href="/essay/edit/nav/{{essay.title}}"><span class="glyphicon glyphicon-edit"></span>编辑此页面</a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+        {%block staticcontent%}{%endblock%}
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-12">
+                <p>{{essay.content|safe}}</p>
+                <p class="help-block"><span class="pull-right">{%if essay.author.being%}{{essay.author.being.link|safe}}{%else%}{{essay.author.username}}{%endif%}更新于{{essay.updatetime|date:'Y年m月d日'}}</span></p>
+            </div>
+        </div>
+        {%include 'comment.html'%}
+    </div>
+{%endblock%}

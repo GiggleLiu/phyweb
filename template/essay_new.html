@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}编辑{{title}}{%endblock%}
+{%block class-nav-index%}active{%endblock%}"
+{%block bodystyle%}background-image:url('{%static 'img/web/bg.jpg'%}'); background-size:cover;{%endblock%}
+{%block script%}
+	<script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js'%}"></script>
+{%endblock%}
+{%block content%}
+<div class="container" style="min-height:500px;">
+    <h1 class="page-title shake">编辑{%if update%}{{essay.title}}{%else%}{%if title%}{{title}}{%else%}新{%endif%}{%endif%}页面</h1>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-12">
+            {%include 'ckeditor.html'%}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace( 'content' );
+</script>
+
+{%endblock%}

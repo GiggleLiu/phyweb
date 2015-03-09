@@ -1,0 +1,304 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}关于王强华理论组{%endblock%}
+{%block class-nav-about%}active{%endblock%}">
+{%block script%}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/csshake.min.css'%}">
+{%endblock%}
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <div class="row" style="margin-top:0px;">
+        <h1 class="page-title shake">Numpy/Scipy with Intel® MKL</h1>
+        <p>转自：<a href="https://software.intel.com/en-us/articles/numpyscipy-with-intel-mkl">https://software.intel.com/en-us/articles/numpyscipy-with-intel-mkl</a></p>
+        <p>文中红色部分是针对学校超算中心，必须要运行的部分。</p>
+<h3>Step 1 - Overview</h3>
+
+<p>This guide is intended to help current NumPy/SciPy users to take advantage of Intel® Math Kernel Library (Intel® MKL).</p>
+
+<p>NumPy automatically maps operations on vectors and matrices to the BLAS and LAPACK functions wherever possible. Since Intel® MKL supports these de-facto interfaces, NumPy can benefit from Intel MKL optimizations through simple modifications to the NumPy scripts.</p>
+
+<p>NumPy is the fundamental package required for scientific computing with Python. It consists of:</p>
+
+<ol><li>a powerful N-dimensional array object</li>
+    <li>sophisticated (broadcasting) functions</li>
+    <li>tools for integrating C/C++ and Fortran code</li>
+    <li>useful linear algebra, Fourier transform, and random number capabilities.</li>
+</ol>
+
+    <p>Besides its obvious scientific uses, NumPy can also be used as an efficient multi-dimensional container of generic data.</p>
+
+    <p>For more information on NumPy, please visit <a href="http://NumPy.scipy.org/">http://NumPy.scipy.org/</a></p>
+
+    <p>SciPy include modules for statistics, optimization, integration, linear algebra, Fourier transforms, signal and image processing, ODE solvers, and more.  The SciPy library depends on NumPy, which provides convenient and fast N-dimensional array manipulation. The SciPy library is built to work with NumPy arrays, and provides many user-friendly and efficient numerical routines such as routines for numerical integration and optimization for python users. Please refer http://www.scipy.org for more details on SciPy.</p>
+
+DGEMM
+
+Version Information
+
+<p>This application note was created to help NumPy/SciPy users to make use of the latest versions of Intel MKL on Linux platforms.</p>
+
+<p>The instructions given in this articles apply to Intel MKL 11.0 and above and Intel Compiler 13.0 and above. The procedures described in this article have been tested for both Python 2.7 and Python 3.4.</p>
+
+<h3>Step 2 - Downloading NumPy and SciPy Source Code</h3>
+
+<p>The NumPy and Scipy source code can be downloaded from:
+
+<a href="http://www.scipy.org/Download">http://www.scipy.org/Download</a></p>
+<p class="text-danger">打开页面拉到底，你同时可以找到matplotlib和ipython的链接。建议通过找到这些软件的github地址，用github把最新的版本pull下来。</p>
+
+Prerequisites
+
+<p>Intel MKL can be obtained from the following options:</p>
+
+<p>Download a FREE evaluation version of the Intel MKL product.</p>
+<p>Download the FREE non-commercial* version of the Intel MKL product.</p>
+
+<p>All of these can be obtained at: Intel® Math Kernel Library product web page.</p>
+
+<p>Intel® MKL is also bundled with the following products</p>
+
+<p>Intel® Parallel Studio XE</p>
+<p>Intel® Composer XE</p>
+<p>Intel® Cluster Studio XE</p>
+
+<h3>Step 3 - Configuration</h3>
+
+<p>Use the following commands to extract the NumPy tar files from the downloaded NumPy-x.x.x.tar.gz.</p>
+
+<div class="highlight">
+<code>$tar -xvf numpy-x.x.x.tar</code>
+</div>
+
+
+<p>The above will create a directory named numpy-x.x.x</p>
+
+<p>And to extract SciPy, use the below commands</p>
+
+<div class="highlight">
+    <code>$tar -xvf scipy-x.x.x.tar.gz</code>
+</div>
+
+
+<p>The scipy-x.x.x directory will be created with extracted files.</p>
+
+<p>You may also get the latest numpy and scipy source from their respective github repositories.</p>
+
+<p>Make sure that C++ and FORTRAN compilers are installed and they are in PATH. Also set LD_LIBRARY_PATH to your compiler (C++ and FORTRAN), and MKL libraries.</p>
+
+<h3>Step 4 - Building and Installing NumPy</h3>
+
+<p>Change directory to numpy-x.x.x</p>
+<div class="highlight">
+<code>$cd numpy-*</code>
+</div>
+<p>Create a <kbd>site.cfg</kbd> from the existing one</p>
+<div class="highlight">
+<code>$cp site.cfg.example site.cfg</code>
+</div>
+
+<p>Edit <kbd>site.cfg</kbd> as follows:</p>
+
+<p>Add the following lines to <kbd>site.cfg</kbd> in your top level NumPy directory to use Intel® MKL, if you are building on Intel 64 platform, assuming the default path for the Intel MKL installation from the Intel Parallel Studio XE or Intel Composer XE versions:</p>
+<div class="highlight">
+    <code>
+        [mkl]<br>
+        library_dirs = /fs01/apps/intel/composer_xe_2013/mkl/lib/intel64<br>
+        include_dirs = /fs01/apps/intel/composer_xe_2013/mkl/include<br>
+        mkl_libs = mkl_rt<br>
+        lapack_libs =
+    </code>
+</div>
+<p class="text-info">
+请先看下到底mkl安装在哪里再执行这一步。
+</p>
+
+
+<p>If you are building NumPy for 32 bit, please add as the following</p>
+
+[mkl] library_dirs = /opt/intel/composer_xe_2013/mkl/lib/ia32
+include_dirs = /opt/intel/mkl/include
+mkl_libs = mkl_rt
+lapack_libs =
+
+<p>Modify cc_exe in <kbd>numpy-x.x.x/numpy/distutils/intelccompiler.py</kbd></p>
+
+<p>self.cc_exe = 'icc -O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost' </p>
+<p class="text-info">
+我们其实要做的改动是：</p>
+<div class="highlight">
+    <code>
+self.cc_exe = 'icc -O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost -i8'
+    </code>
+</div>
+<p class="text-info">
+否则之后将会提示找不到mkl。注意有多处要改动（两处）。
+</p>
+
+<p>Here we use, -O3, optimizations for speed and enables more aggressive loop transformations such as Fusion, Block-Unroll-and-Jam, and collapsing IF statements, -openmp for OpenMP threading and -xhost option tells the compiler to generate instructions for the highest instruction set available on the compilation host processor. If you are using the ILP64 interface, please add -DMKL_ILP64 compiler flag.</p>
+
+<p>Run icc --help for more information on processor-specific options, and refer Intel Compiler documentation for more details on the various compiler flags.</p>
+
+<p>Modify the the Fortran compiler configuration in <kbd>numpy-x.x.x/numpy/distutil/fcompiler/intel.py</kbd> to use the following compiler options for the Intel Fortran Compiler:</p>
+
+<p>For ia32 and Intel64</p>
+
+<p>ifort -xhost -openmp -fp-model strict -fPIC</p>
+<p class="text-info">
+我们其实要做的改动是把程序中get_flags_opt函数中的语句改成如下：</p>
+<div class="highlight">
+    <code>
+        -xhost -openmp -fp-model strict -fPIC -i8
+    </code>
+</div>
+<p class="text-info">
+否则之后将会提示找不到mkl。注意有多处要改动（也有两处）。
+</p>
+
+<p>If you are using the latest source, this is already modified in intel.py.   You may explore using other compiler optimization flags.</p>
+
+<p class="text-danger">If you are using ILP64 interface of Intel MKL, please add -i8 flag above.</p><p>If you are using older versions of Numpy/SciPy, please refer the new intel.py for your reference from the latest version of NumPy, which can be replaced to use the above mentioned compiler options.</p>
+
+<h5>Compile and install NumPy with the Intel compiler:</h5>
+<p>For Intel64 platforms run:</p>
+
+<div class="highlight">
+    <code>
+$python setup.py config --compiler=intelem build_clib --compiler=intelem build_ext --compiler=intelem install
+    </code>
+</div>
+
+<p>and for the ia32 builds:</p>
+
+<p>$python setup.py config --compiler=intel build_clib --compiler=intel build_ext --compiler=intel install</p>
+
+<p>The difference is, using "intel" for ia32 and intelem" for the intel64.   You may pass --prefix=<install dir>, in case, if you want to install in a directory of your choice.</p>
+
+<h5>Build and Install SciPy</h5>
+
+<p>Compile and install SciPy with the Intel Compilers, for 64 bit builds:</p>
+
+<div class="highlight">
+    <code>
+$python setup.py config --compiler=intelem --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem install
+    </code>
+</div>
+
+<p>and for the ia32 builds:</p>
+
+<p>$python setup.py config --compiler=intel --fcompiler=intel build_clib --compiler=intel --fcompiler=intel build_ext --compiler=intel --fcompiler=intel install</p>
+
+<p>Setup Library path for Intel MKL and Intel Compilers</p>
+
+<p>If you build NumPY/SciPy for Intel64 bit platforms:</p>
+
+<div class="highlight">
+    <code>
+$export LD_LIBRARY_PATH=/fs01/apps/intel/composer_xe_2013/mkl/lib/intel64:/opt/intel/composer_xe_2013/lib/intel64:$LD_LIBRARY_PATH
+    </code>
+</div>
+
+<p>If you build NumPY for ia32 bit platforms:</p>
+
+<p>$export LD_LIBRARY_PATH=/opt/intel/composer_xe_2013/mkl/lib/ia32:/opt/intel/composer_xe_2013/lib/ia32:$LD_LIBRARY_PATH</p>
+
+<p>It is possible that LD_LIBRARY_PATH causes a problem, if you have installed Intel MKL and Intel Composer XE in other directories than the standard ones. The only solution we ha've found that always works is to build Python, NumPy and SciPy inside an environment where you've set the LD_RUN_PATH variable, e.g: for ia32 platform:</p>
+
+<p>$export LD_RUN_PATH=/opt/intel/composer_xe_2013/lib/ia32:/opt/intel/composer_xe_2013/mkl/lib/ia32</p>
+
+<p class="text-info">对于64位系统</p>
+<div class="highlight">
+    <code>
+$export LD_RUN_PATH=/fs01/apps/intel/composer_xe_2013/lib/intel64:/fs01/apps/intel/composer_xe_2013/mkl/lib/intel64
+    </code>
+</div>
+
+<p>Note:We recommend users to use arrays with 'C' ordering style which is row-major, which is default than Fortran Style which is column-major, and this is because NumPy uses CBLAS and also to get better performance.</p>
+
+<h3>Appendex A: Example:</h3>
+
+<p>Please see below an example Python script for matrix multiplication that you can use Numply installed with Intel MKL which has been provided for illustration purpose.</p>
+
+<div class="highlight">
+    <pre><code>import numpy as np  
+import time   
+N = 6000  
+M = 10000  
+  
+k_list = [64, 80, 96, 104, 112, 120, 128, 144, 160, 176, 192, 200, 208, 224, 240, 256, 384]  
+  
+def get_gflops(M, N, K):  
+    return M*N*(2.0*K-1.0) / 1000**3  
+  
+np.show_config()  
+  
+for K in k_list:  
+    a = np.array(np.random.random((M, N)), dtype=np.double, order='C', copy=False)  
+    b = np.array(np.random.random((N, K)), dtype=np.double, order='C', copy=False)  
+    A = np.matrix(a, dtype=np.double, copy=False)  
+    B = np.matrix(b, dtype=np.double, copy=False)  
+  
+    C = A*B  
+  
+    start = time.time()  
+  
+    C = A*B  
+    C = A*B  
+    C = A*B  
+    C = A*B  
+    C = A*B  
+  
+    end = time.time()  
+  
+    tm = (end-start) / 5.0  
+  
+    print "{0:4}, {1:9.7}, {2:9.7}".format(K, tm, get_gflops(M, N, K) / tm) 
+</code></pre>
+</div>
+
+<h3>Appendix B: Performance Comparison</h3>
+
+LU
+ 
+
+Cholesky
+
+SVD
+
+<p>Please click Examples.py to download the examples for LU, Cholesky and SVD.</p>
+
+<p>Please note all the charts in this article were generated with the Intel MKL 11.1 update 1 version.</p>
+
+Appendix 1:
+
+Known issues:
+
+ 
+
+<p>When the -O3 or -O2(default) compiler flags (more aggressive compiler optimization flags) used for the ifort, one of the scipy tests may fail and it is a known corner case, to avoid this, as a workaround you can use -O1. </p>
+
+ 
+
+<p>Building with GNU Compiler chain:</p>
+
+<p>Make modifications to MKL section in the site.cfg as mentioned above. To build numpy and scipy with Gnu compilers, in the site.cfg file, you must link with mkl_rt only and any other linking method will not work.</p>
+
+<p>Export the compiler flags as:</p>
+1	$export CFLAGS="-fopenmp -m64 -mtune=native -O3 -Wl,--no-as-needed"
+2	$export CXXFLAGS="-fopenmp -m64 -mtune=native -O3 -Wl,--no-as-needed"
+3	$export LDFLAGS="-ldl -lm"
+4	$export FFLAGS="-fopenmp -m64 -mtune=native -O3"
+
+<p>Then run the config, build, install commands for both numpy and scipy from their respective source folders.</p>
+
+<p>If you want to use GNU OpenMP instead of Intel OpenMP, you should set MKL_THREADING_LAYER=GNU.</p>
+
+<p>Since both numpy and scipy has the linear algebra functions, users can call either numpy BLAS or scipy BLAS, but not both. Usage of both at the same time is not supported by MKL and may lead to crashes.</p>
+
+<p>When using scipy BLAS, you must set MKL_INTERFACE_LAYER=GNU.</p>
+
+<p>The above environment various MKL_THREADING_LAYER and MKL_INTERFACE_LAYER are supported only from Intel MKL 11.1 update 3 and above.</p>
+        </div>
+    </div>
+</div>
+{%endblock%}

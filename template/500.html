@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}服务器故障{%endblock%}
+{%block content%}
+
+    <div class="container" style="min-height:600px;">
+        <h1 class="page-title">500</h1>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-8">
+                <p class="text-danger"> 抱歉，貌似服务器出故障了，要不要给站长反馈下？<a href="#" data-toggle="modal" data-target="#modal-feedback">点此处反馈</a></p>
+            </div>
+    	</div>
+    </div>
+    
+
+{%endblock%}

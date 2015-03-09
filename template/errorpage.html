@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}发生了一点小错误{%endblock%}
+{%block content%}
+
+    <div class="container" style="min-height:600px;">
+        <h1 class="page-title">错误</h1>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-8">
+                <p class="text-danger">{{error}}，要不要给站长反馈下？<a href="#" data-toggle="modal" data-target="#modal-feedback">点此处反馈</a></p>
+            </div>
+    	</div>
+    </div>
+    
+
+{%endblock%}

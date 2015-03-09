@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block class-nav-topic%}active{%endblock%}
+{%block content%}
+<div class="container">
+<div class="row" style="margin-top:30px;">
+    <div class="col-md-12">
+        <h1 class="page-title">{{essay.topic.link|safe}} - {{essay.title}}</h1>
+        <div class="btn-group pull-right">
+            {%if user.is_superuser or user == essay.author%}
+            <a class="btn btn-danger" href="/topic/essay/delete/{{essay.id}}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+            {%endif%}
+            {%if user == essay.author%}
+            <a class="btn btn-primary" href="/topic/essay/update/{{essay.id}}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            {%endif%}
+        </div>
+    </div>
+</div>
+<div>
+    <p>{{essay.content|safe}}</p>
+    <p class="help-block"><span class="pull-right">{%if essay.author.being%}{{essay.author.being.link|safe}}{%else%}{{essay.author.username}}{%endif%}更新于{{essay.updatetime|date:'Y年m月d日'}}</span></p>
+</div>
+{%include 'comment.html'%}
+</div
+{%endblock%}

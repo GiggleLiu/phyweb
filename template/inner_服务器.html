@@ -1,0 +1,61 @@
+{%extends 'inner_topic.html'%}
+{% load i18n static %}
+{%block staticcontent%}
+<h3>登陆服务器</h3>
+<p>我们组的服务器：test4@login1.hpc.ncmqm.org<br>
+密码是：qhwang</p>
+【例】Linux下登陆口令：
+<div class="highlight">
+    <code>
+    $ssh test4@login1.hpc.ncmqm.org
+    </code>
+    <br>并根据提示输入密码。
+</div>
+<h3>提交/察看/删除作业</h3>
+<p>【例】提交一个多24核运行的程序./vasp：</p>
+<div class="highlight">
+    <code>
+        $bsub -q x5650 -n 24 mpiexec.hydra ./vasp
+    </code>
+</div>
+<p class="help-block"><kbd>./vasp</kbd>说明提交的任务是./vasp（即运行文件为 ./vasp）。</p>
+<p class="help-block"><kbd>mpiexec.hydra</kbd>指定使用intelmpi。</p>
+<p class="help-block"><kbd>-n 24</kbd>指定用24个CPU跑。</p>
+<p class="help-block"><kbd>-q x5650</kbd>指定提交到x5650队列，一般选择提交到任务较少的队列，可以用以下命令察看所有可用队列。</p>
+<p class="text-info">在本组已经购置集群的情况下，可以不使用-q，它会把任务默认提交到自己的队列。</p>
+<div class="highlight">
+    <code>
+       $bqueues 
+    </code>
+</div>
+<p>【例】提交一个多单核运行的程序./vasp：</p>
+<div class="highlight">
+    <code>
+        $bsub -q x5650 ./vasp
+    </code>
+</div>
+<p class="text-info">你不用担心输出的问题，它会自动把你的输出保存到当前目录的output_xxxxx文件中,其中xxxxx是你的任务ID（见后）。</p>
+用以下命令可以察看自己提交的任务的情况,同时，你可以了解到自己的任务执行状况和任务ID：</p>
+<div class="highlight">
+    <code>
+       $bjobs 
+    </code>
+</div>
+<p>【例】删除作业</p>
+<div class="highlight">
+    <code>
+        $bkill 55036
+    </code>
+</div>
+<p class="help-block">其中<kbd>55036</kbd>是作业的标识，它可以通过bjobs命令察看得到。</p>
+
+
+<h3>了解更多</h3>
+<p><a href="http://www.ncmqm.org/zh-CN/%E6%94%AF%E6%92%91%E5%B9%B3%E5%8F%B0/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97%E4%B8%AD%E5%BF%83" target="_new">去高性能计算中心</a></p>
+<p><a href="/help/install_numpy/">了解如何在校服务器上部署python开发环境</a></p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="staticbanner"></div>
+    </div>
+</div>
+{%endblock%}

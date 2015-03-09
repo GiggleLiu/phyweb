@@ -1,0 +1,33 @@
+{%load bootstrap%}
+                {%block script%}
+                {%endblock%}
+                {%if update%}
+                <form id="esform" role="form" enctype="multipart/form-data" class="" method="POST" action="/topic/essay/update/{{essay.id}}/">
+                {%else%}
+                <form id="esform" role="form" enctype="multipart/form-data" class="" method="POST" action="/topic/essay/new/{{topic.id}}/{{content_type}}/">
+                {%endif%}
+				<fieldset>
+                    <input type="hidden" class="form-control" id="content_type" name="content_type" required value="{{content_type}}">
+                    {{form.title|bootstrap}}
+					<div class="form-group">
+					    <label class="" for="content">编辑正文</label>
+                        {%block textarea%}
+                        {%endblock%}
+                    </div>
+			        <div class="form-group">
+			        	<div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" id="btn-cancel" class="btn btn-danger">取消</button>
+                                {%block switch%}
+                                {%endblock%}
+                                <button type="submit" class="btn btn-primary">{%if update%}保存更改{%else%}&emsp;提交&emsp;{%endif%}</button>
+                            </div>
+			            </div>
+			        </div>
+                </fieldset>
+                </form>
+                <script>
+                    $('#esform').on('submit',function(){
+                        if(!isvalidtitle($('#title').val())){alert('InValid Title(word,number and space only), Pick another one!');return false;}
+                    });
+                </script>

@@ -1,0 +1,84 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}王强华理论组{%endblock%}
+{%block class-nav-index%}active{%endblock%}
+{%block bodystyle%}background-image:url('{%static 'img/web/bg.jpg'%}'); background-size:cover;{%endblock%}
+{%block script%}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/csshake.min.css'%}">
+{%endblock%}
+{%block content%}
+    <div class="container">
+        <h1 class="page-title shake">Theoritical Physicists</h1>
+        <p class="help-block" style="margin-bottom:20px;">Best theoritical physicists in China.</p>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+                
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <div class="carousel-div">
+                        <img src="{%static 'img/web/slide-1.jpg'%}" alt="this is an alt" class="carousel-img">
+                        </div>
+                        <div class="carousel-caption">
+                            <h3>Title</h3>
+                            <p>Some introduction here.</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="carousel-div">
+                            <img src="{%static 'img/web/slide-2.jpg'%}" alt="this is an alt" class="carousel-img">
+                        </div>
+                        <div class="carousel-caption">
+                            <h3>Title</h3>
+                            <p>Some introduction here.</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="carousel-div">
+                            <img src="{%static 'img/web/slide-3.jpg'%}" alt="this is an alt" class="carousel-img">
+                        </div>
+                        <div class="carousel-caption">
+                            <h3>NanJing University</h3>
+                            <p>This is the university where we stay.</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top:50px;">
+                <div class="col-md-12">
+                    {%if perms.being.can_edit_essay%}
+                    <a class="btn btn-primary pull-right" href="/essay/edit/index/default/"><span class="glyphicon glyphicon-edit"></span>编辑此页面</a>
+                    {%endif%}
+                    <div>{{indexarticle.content|safe}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%if login%}
+    <script>
+        $(document).ready(function(){
+            $('#modal-login').modal('show');
+        });
+    </script>
+    {%endif%}
+{%endblock%}

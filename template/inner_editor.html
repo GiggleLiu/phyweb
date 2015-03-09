@@ -1,0 +1,18 @@
+{%extends 'inner_base.html'%}
+{% load i18n static %}
+{%block navnew_class%}active{%endblock%}
+{%block innerpage%}
+{%if update%}
+    {%if essay.content_type == 'latex'%}
+    {%include 'latex.html'%}
+    {%else%}
+    {%include 'ckeditor.html'%}
+    {%endif%}
+{%else%}
+    {%if content_type == 'latex'%}
+    {%include 'latex.html'%}
+    {%else%}
+    {%include 'ckeditor.html'%}
+    {%endif%}
+{%endif%}
+{%endblock%}

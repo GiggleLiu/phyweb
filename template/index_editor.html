@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block class-nav-index%}active{%endblock%}
+{%block title%}编辑主页{%endblock%}
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <h1 class="page-title shake">编辑主页</h1>
+        <div class="row" style="margin-top:0px;">
+            {%if content_type == 'latex'%}
+            {%include 'latex.html'%}
+            {%else%}
+            {%include 'ckeditor.html'%}
+            {%endif%}
+        </div>
+    </div>
+</div>
+{%endblock%}

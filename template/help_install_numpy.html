@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}安装numpy{%endblock%}
+{%block class-nav-inner%}active{%endblock%}">
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <h1 class="page-title">下载校服务器平台的numpy一键安装包</h1>
+        <div class="row" style="margin-top:0px;">
+            <h3>方法一：</h3>
+            <p>下载共享文件<a href="{%static 'media/fshare/scienv.tar.gz'%}" target="_blank">scienv.tar.gz</a>，将它拷贝并解压在自己的用户目录下。运行：</p>
+            <div class="highlight">
+                <code>
+                $source sci/bin/activate
+                </code>
+            </div>
+            <p>这样，你就开启了python的虚拟环境。</p>
+            <strong>提交作业</strong>
+            <p>值得注意的是，在提交作业的时候，服务器的环境并没有被配置好，所以需要自己建立一个bash脚本先让服务器初始化环境再提交，案例如下：</p>
+            <div class="highlight">
+                <code>
+                    #!/bin/bash<br>
+                    source ~/.bashrc #to initialize the environment to run<br>
+                    source ~/sci/bin/activate #my virtualenv<br>
+                    python ~/Giggle/meanfield/model_bc3.py #my python script
+                </code>
+            </div>
+
+            <h3>方法二：</h3>
+            <p>自行参考下面的自动化安装脚本。可以直接拷贝到您的用户目录下运行(下载脚本所需的文件：<a href="{%static 'media/fshare/python%E7%A7%91%E5%AD%A6%E8%BF%90%E7%AE%97%E5%8C%85.tar.gz'%}">python科学计算包</a>。</a></p>
+            <div class="hightlight">
+                <pre><code>
+{%include 'initsci.sh'%}
+                </code></pre>
+            </div>
+            <div>提交作业部分同方法一。</div>
+            <a href="/help/server_numpy/">了解如何安装基于intel mkl的numpy和scipy。</a>
+        </div>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block title%}{{paper}}{%endblock%}
+{%block content%}
+
+<div class="container">
+    <h1>{{paper}}</h1>
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    详细信息
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Authors</dt><dd>{{paper.author}}</dd>
+                        <dt>&nbsp;</dt><dd> </dd>
+                        <dt>Pubyear</dt><dd>{{paper.pubyear}}</dd>
+                        <dt>&nbsp;</dt><dd> </dd>
+                        <dt>Journal Volume</dt><dd>{{paper.journal}}&nbsp;{{paper.volume}}</dd>
+                        <dt>&nbsp;</dt><dd> </dd>
+                        <dt>Abstract:</dt><dd>{{paper.description}}</dd>
+                        <dt>&nbsp;</dt><dd> </dd>
+                        <dt>DOI(Link):</dt><dd><a href="{{paper.link}}">{{paper.link}}</a></dd>
+                        <dt>&nbsp;</dt><dd> </dd>
+                    </dl>
+                </div>
+                {%ifequal paper.creater user%}
+                <div class="panel-footer">
+                    <div class="row">
+                    <div class="pull-right btn-group">
+                        <a href="/paper/delete/{{paper.id}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>删除</a>&emsp;<a class="btn btn-primary" href="/paper/update/{{paper.id}}"><span class="glyphicon glyphicon-edit"></span>修改这篇论文</a>
+                    </div>
+                    </div>
+                </div>
+                {%endifequal%}
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

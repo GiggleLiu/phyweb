@@ -1,0 +1,57 @@
+<!doctype html>
+{%extends 'base.html'%}
+{% load i18n static bootstrap%}
+{%block script%}
+<link rel="stylesheet" href="{%static 'css/datepicker3.css'%}">
+<script src="{%static 'js/bootstrap-datepicker.js'%}"></script>
+<script src="{%static 'js/bootstrap-datepicker.zh-CN.js'%}"></script>
+{%endblock%}
+{%block content%}
+<div class="container" style="min-height:500px;">
+    <h1>{%if update%}修改您的资料{%else%}填写基本信息{%endif%}</h1>
+	<div class="row" style="margin-top: 80px;">
+		<div class="col-md-8 col-xs-12">
+            <div id="update-information">
+                <form enctype="multipart/form-data" class="form-horizontal" method="POST" action="{%if update%}/being/being_update/{%else%}/being/register_step2/{%endif%}">
+		    	<fieldset>
+                    {{form.truename|bootstrap_horizontal}}
+                    {{form.gender|bootstrap_horizontal}}
+                    {{form.description|bootstrap_horizontal}}
+
+                    <div class="form-group" style="margin-top:50px;">
+                        <div class="text-primary col-md-offset-2">The following are optional ...</div>
+                    </div>
+                    {{form.face|bootstrap_horizontal}}
+                    {{form.birthday|bootstrap_horizontal}}
+                        <script>
+                            $('#id_birthday').datepicker({
+                                todayBtn: true,
+                                language: "zh-CN",
+                                format:"yyyy-mm-dd",
+                                autoclose: true,
+                                todayHighlight: true
+                                });
+                        </script>
+                    {{form.telephone|bootstrap_horizontal}} 
+                    {{form.qq|bootstrap_horizontal}} 
+                    {{form.weixin|bootstrap_horizontal}} 
+                    {{form.weibo|bootstrap_horizontal}} 
+			        <div class="form-group">
+			          <!-- Button -->
+			        	<div class="pull-right">
+                            {%if update%}
+                            <a title="" href="/being/user_detail/{{user.id}}" class="btn btn-default">放弃修改</a>
+                            {%else%}
+                            <a title="" href="/login/" class="btn btn-default">跳过</a>
+                            {%endif%}
+                            <button type="submit" class="btn btn-primary">{%if update%}保存更改{%else%}保存{%endif%}</button>
+			            </div>
+			        </div>
+			        
+				</fieldset>
+			</form>
+            </div>
+		</div>
+	</div>
+</div>
+{%endblock%}

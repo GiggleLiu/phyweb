@@ -1,0 +1,210 @@
+{% load i18n static %}
+<!doctype html>
+<html>
+<head>
+    <title>
+    {%block title%}{%endblock%}
+    </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.dark.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/global.css'%}">
+    	<script type="text/javascript" src="{% static 'js/jquery.min.js'%}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+	<script type="text/javascript" src="{% static 'js/global.js'%}"></script>
+	<link rel="shortcut icon" href="{%static 'img/web/favicon.ico'%}" type="image/x-icon" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="{% static 'js/html5shiv.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/respond.min.js'%}"></script>
+    <![endif]-->
+    {%block script%}{%endblock%}
+</head>
+
+<body style="{%block bodystyle%}{%endblock%}">
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	    </button>
+    <a class="navbar-brand" href="/" title="Phsicists are Full with legs!">Leg Builder</a>
+    </div>
+
+  	<!-- Collect the nav links, forms, and other content for toggling -->
+  	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    	<ul class="nav navbar-nav" id="nav1-ul">
+            <li class="{%block class-nav-index%}{%endblock%}"><a href="/" title="Main Page.">Home</a></li>
+            <li class="{%block class-nav-lab%}{%endblock%}"><a href="/lab/" title="A Collection of Utility Developed By Leo.">Lab</a></li>
+            <li class="{%block class-nav-topic%}{%endblock%}"><a href="/topic/1/" title="Share Your Idea With Us">Topic</a></li>
+            <li class="{%block class-nav-git%}{%endblock%}"><a href="/git/" title="Share Your Git-Repository With Us.">Git Share</a></li>
+            <li class="{%block class-nav-about%}{%endblock%}"><a href="/help/about/" title="About Our Handsome Author">about</a></li>
+    	</ul>
+        {%block userpanel%}
+            {%if not user.is_authenticated%}
+            <ul class="nav navbar-nav navbar-right">
+	            <li>
+                    <a href="#" class="" data-toggle="modal" data-target="#modal-login">
+          	            <span class="glyphicon glyphicon-user" style="font-size: 1.2em;"></span>
+                        <span class="small-grey"> Login</span>
+                    </a>
+                </li>
+	            <li>
+                    <a href="/being/register_step1/">
+          	            <span class="glyphicon glyphicon-plus" style="font-size: 1.2em;"></span>
+                        <span class="small-grey" style="margin-right:15px;"> Join Us</span>
+                    </a>
+                </li>
+            </ul>
+            {%else%}
+	        <ul class="nav navbar-nav navbar-right">
+	      	    <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding:15px;">
+                    <span class="glyphicon glyphicon-envelope {%ifnotequal noticestatus.0 0%}text-danger{%else%} {%ifnotequal noticestatus.1 0%}text-danger{%endifnotequal%}{%endifnotequal%}" style="font-size: 1.2em;"></span>
+          		  	    Message
+          		  	    <span class="caret"></span>
+              	    </a>
+              	    <ul class="dropdown-menu">
+                        <li><a href="/notice/1/" target="content">Notice【<span class="{%if noticestatus.0%}text-danger{%endif%}">{{noticestatus.0}}</span>】</a></li>
+              	    </ul>
+                </li>
+	      	    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          		  	    <span class="glyphicon glyphicon-user" style="font-size: 1.2em;"></span>
+          		  	    <span class="small-grey">Account</span>
+          		  	    <b class="caret"></b>
+              	    </a>
+              	    <ul class="dropdown-menu">
+                        <li><a href="{% url 'logout'%}" id="logout">Logout</a></li>
+                        {%if not user.is_superuser%}
+                        <li><a href="/being/user_detail/{{user.id}}/" target="content">Profile</a></li>
+                        {%else%}
+                        <li><a href="/being/user_manage/" target="content">User Management</a></li>
+                        {%endif%}
+              	    </ul>
+                </li>
+	        </ul>
+            {%endif%}
+        {%endblock%}
+  	</div><!-- /.navbar-collapse -->
+</nav>
+<div id="error-block">
+{%if error%}
+<div class="alert alert-danger" role="alert">{{error}}<a href="#" class="close" data-dismiss="alert">&times;</a></div>
+{%endif%}
+</div>
+
+{%if info%}
+<div class="alert alert-info" role="alert">{{info}}<a href="#" class="close" data-dismiss="alert">&times;</a></div>
+{%endif%}
+<div id="content-wrap">
+{%block content%}
+{%endblock%}
+</div>
+<!--Footer Block-->
+<div style="margin-top: 100px;" class="footer">
+<div class="bg-info text-primary" style="padding:20px;">
+	<div class="container">
+
+		<div class="row">
+			<div class="col-md-3">
+				<ul class="list-unstyled">
+					<li>
+						<h5 class="text-muted">About Author</h5>
+					</li>
+                    <li><a href="/help/about/">Self Introduction</a></li>
+                    <li><a href="mailto:cacate0129@gmail.com">Contact Me(Mail)</a></li>
+                    <li>Tel：13913901792</li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<ul class="list-unstyled">
+					<li>
+						<h5 class="text-muted">About Website</h5>
+					</li>
+                    <li><a href="/help/site/">About Leg Builder</a></li>
+                    <li><a href="/help/index/">A Tutortial for The Website</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#modal-feedback" onClick="$('#sendto').val('admin')">Bug Report</a></li>
+				</ul>
+			</div>
+            <div class="col-md-3">
+				<ul class="list-unstyled">
+                    <li class="col-md-6"><a href="{%static 'img/web/2dcode-adv.png'%}" target="_new" class="thumbnail"><img src="{%static 'img/web/2dcode-adv.png'%}"></a></li>
+				</ul>
+			</div>
+		</div>
+        <div class="row"><small class="col-md-12 text-muted">&copy;2014-2024 Jinguo Leo. All Rights Reserved.</small>
+	</div>
+</div>
+</div>
+    
+<div class="modal fade" id="modal-feedback" tabindex="-1" role="dialog" aria-labelledby="feedback" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Advise</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="modal-form" id="form-feedback" method="POST" action='/notice/advice/'>
+                    <input type="hidden" id="sendto" name="sendto">
+                    <div class="form-group">
+                        <label for="area-feedback">Advise</label>
+                        <textarea class="form-control" id="area-feedback" placeholder="Please Leave Your Mail to Us." name="content" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-9">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info" id="submit-feedback">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%if not user.authenticated%}
+<!-- Modal login -->
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel"><span id="modal-title"></span>Login</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="modal-form" id="form-login" method="POST" action='/being/login/'>
+                    <div class="form-group">
+                        <label for="input-password">Username</label>
+                        <input type="text" class="form-control" id="input-username" placeholder="" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-password">Password</label>
+                        <input type="password" class="form-control" id="input-password" placeholder="" name="password" required>
+                    </div>
+                    <a href="/being/register_step1/">go to register</a>
+                    <div class="form-group">
+                        <div class="col-xs-offset-9">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info" id="submit-login">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$('#modal-login').on('shown.bs.modal', function () {
+    $('#input-username').focus();
+});
+</script>
+{%endif%}
+
+</body>
+</html>

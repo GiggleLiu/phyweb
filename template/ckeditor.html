@@ -1,0 +1,21 @@
+{%extends 'editor.html'%}
+{% load i18n static bootstrap%}
+{%block script%}
+<script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js'%}"></script>
+{%endblock%}
+{%block textarea%}
+{{form.content|bootstrap}}
+{%endblock%}
+{%block content_type%}ckeditor{%endblock%}
+{%block switch%}
+{%if not update%}
+<button type="button" href="/essay/new/{{topic}}/latex/" class="btn btn-warning" id="btn-switch">切换到Latex模式</button>
+<script>
+$('#btn-switch').click(function(){
+    if(confirm('确定要更改编辑器吗，这样您的数据将会全部消失？')){
+    window.location.href='{%if update%}/topic/update/{{essay.id}}/latex/{%else%}/topic/essay/new/{{topic.id}}/latex/{%endif%}';
+    }
+});
+</script>
+{%endif%}
+{%endblock%}

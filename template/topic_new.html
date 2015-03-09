@@ -1,0 +1,31 @@
+{%extends 'base.html'%}
+{% load i18n static bootstrap %}
+
+{%block title%}Add a New Topic{{title}}{%endblock%}
+{%block class-nav-topic%}active{%endblock%}"
+{%block bodystyle%}background-image:url('{%static 'img/web/bg.jpg'%}'); background-size:cover;{%endblock%}
+{%block script%}
+	<script type="text/javascript" src="{% static 'js/ckeditor/ckeditor.js'%}"></script>
+{%endblock%}
+{%block content%}
+<div class="container" style="min-height:500px;">
+    <h1 class="page-title shake">Add a New Topic</h1>
+        <div class="row" style="margin-top:0px;">
+            <div class="col-md-12">
+                <form class="form-horizontal" method="POST" action="{%if update%}/topic/update/{{tid}}/{%else%}/topic/new/{%endif%}">
+				    <fieldset>
+                    {{form|bootstrap}}
+			        <div class="form-group">
+			        	<div class="">
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
+                            <a href="/topic/" class="btn btn-default pull-right" style="margin-right:5px;">Cancel</a>
+			            </div>
+			        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

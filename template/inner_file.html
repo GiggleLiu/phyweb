@@ -1,0 +1,56 @@
+{%extends 'inner_base.html'%}
+{% load i18n static %}
+{%block navfile_class%}active{%endblock%}
+{%block innerpage%}
+<table class="table">
+    <!--<legend>文件列表</legend>-->
+    <tr class="bg-primary"><th class="col-md-5">文件</th><th class="col-md-4">描述</th><th class="col-md-2">上传者</th><th class="col-md-1">操作</th></tr>
+    {%for file in flist%}
+    <tr>
+        <td>{{file.link|safe}}</td>
+        <td>{{file.description|default:""}}</td>
+        <td><span title="上传于{{file.uploadtime|date:'Y年n月j日'}}">{{file.creater.being.link|safe}}</span></td>
+        <td><a href="/file/delete/{{file.id}}" title="删除这个文件"><span class="glyphicon glyphicon-remove"></span></a></td>
+    </tr>
+{%endfor%}
+</table>
+
+<div class="row" style="margin-top:50px;">
+    <div class="col-md-9">
+        <div class="panel panel-default hide" id="panel-file">
+            <div class="panel-body">
+                <ul class="list-unstyled help-block" id="ul-file"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary btn-block" onClick="$('#input-file').trigger('click');$('#panel-file').removeClass('hide');$('#form-file').removeClass('hide');"><span class="glyphicon glyphicon-plus"></span>上传文件</button>
+    </div>
+</div>
+<div class="row">
+    <form role="form" enctype="multipart/form-data" class="hide" method="POST" action="/file/new/" id="form-file">
+    <fieldset>
+	    <div class="form-group">
+            <input type="file" class="form-control hide" id="input-file" name="file" placeholder="file" required multiple>
+        </div>
+	    <div class="form-group">
+            <div class="col-md-9">
+                <textarea placeholder="添加描述" class="form-control" name="description"></textarea>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-info btn-block">确定上传</button>
+            </div>
+	    </div>
+    </fieldset>
+    </form>
+</div>
+<script>
+    $('#input-file').on('change',function(){
+        var files = this.files;
+        $('#ul-file').html('');
+        for(var i=0;i<files.length;i++){
+            $('#ul-file').append('<li>'+files[i].name+'</li>')
+        }
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,68 @@
+
+{%load comments%}
+{% get_comment_count for essay as ccount %}
+<div class="row" style="margin-top:77px;">
+    <div class="col-md-12">
+        <label>共{{ccount}}条评论</label>
+            {% get_comment_list for essay as comment_list %}
+            <ul class="list-group" >
+                {%for comment in comment_list%}
+                <li class="list-group-item" style="background-color:rgb(127,178,240);border-color:rgb(147,198,260);">
+                    {%if comment.user == user or perms.being.can_edit_essay%}
+                    <h4 class="list-group-item-heading">#{{forloop.counter}}&nbsp;{%if comment.user.being%}{{comment.user.being.link|safe}}{%else%}{{comment.user.username}}{%endif%}
+                        <a class="pull-right text-alert" style="font-size:0.8em;" href="#" title="删除这条评论" onClick="deletecomment('{{comment.id}}')"><span class="glyphicon glyphicon-remove"></span></a>
+                    </h4>{%endif%}
+                    <p class="list-group-item-text">{{comment.comment}}</p>
+                    <p class="help-block text-align" align="right">
+                        发表于{{comment.submit_date|date:'Y年m月d日 H:i'}}
+                    </p>
+                </li>
+                {%endfor%}
+            </ul>
+    </div>
+</div>
+{% get_comment_form for essay as esform %}
+<div class="row">
+    <form role="form" enctype="multipart/form-data" class="col-md-12" method="POST" action="{% comment_form_target %}">
+	<fieldset>
+        <input type="hidden" name="next" value="/{{essay.block}}/{{essay.title}}/" />
+		<div class="form-group">
+			<label class="" for="content">发表评论</label>
+            {% csrf_token %}
+            {{ esform.comment}}
+            <script>
+                $('#id_comment').addClass('form-control');
+                $('#id_comment').attr('rows',4);
+                {%if not user.is_authenticated%}
+                $('#id_comment').attr('disabled','true');
+                $('#id_comment').val('您必须要先登陆才能发表评论');
+                {%endif%}
+            </script>
+        </div>
+        {%if user.is_authenticated%}
+		<div class="form-group">
+			<div class="pull-right">
+                <button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</div>
+        <div class="hide">
+            {{ esform.honeypot }}
+            {{ esform.content_type }}
+            {{ esform.object_pk }}
+            {{ esform.timestamp }}
+            {{ esform.security_hash }}
+        </div>
+        {%else%}
+        <p><a href="#" class="" data-toggle="modal" data-target="#modal-login">直接登陆</a>
+        或者<a href="/being/register_step1/">去注册一个帐号</a>吧！</p>
+        {%endif%}
+    </fieldset>
+    </form>
+</div>
+<script>
+    function deletecomment(cid){
+        if(confirm('确定删除这条评论吗？')){
+            window.location.href="/comments/delete_own/"+cid.toString();
+        }
+    }
+</script>

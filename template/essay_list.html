@@ -1,0 +1,53 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block title%}{%endblock%}
+{%block class-nav-topic%}active{%endblock%}
+{%block content%}
+
+<div class="container" style="min-height:600px;">
+    <h1 class="page-title">{{topic.title}}</h1>
+    <div class="row" style="margin-top:50px;">
+        <div class="col-md-3 col-xs-12">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Under This Topic">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                </span>
+            </div><!-- /input-group -->
+        </div>
+	
+        <div class="col-xs-12 col-md-9">
+            <div class="panel panel-info">
+                <div class="panel-heading">Articles on {{topic.title}} (Page {{pageindex}}/{{totalpages}})
+                    {%if perms.being.can_edit_essay%}
+                    <a href="/topic/essay/new/{{topic.id}}/default/" title="Compose a New Article" class="pull-right">
+                        <span class="badge glyphicon glyphicon-pencil" aria-hidden="true">&nbsp;Compose</span>
+                    </a>
+                    {%endif%}
+                </div>
+                <ul class="list-group">
+                    {%for essay in essaylist%}
+                    <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{essay.link|safe}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="pull-right">{{essay.author.being.link|safe}}</span>
+                            <span class="text-muted pull-right">{{essay.updatetime}}</span>
+                        </div>
+                    </div>
+                    </li>
+                    {%endfor%}
+                </ul>
+            </div>
+            <ul class="pager">
+                <li class="previous {%if pageindex < 2%}disabled{%endif%}"><a href="{%if pageindex > 1%}/notice/{{pageindex|add:-1}}{%else%}#{%endif%}">&larr;Prev</a></li>
+                <li class="next {%if pageindex == totalpages%}disabled{%endif%}"><a href="{%if pageindex < totalpages%}/notice/{{pageindex|add:1}}{%else%}#{%endif%}">Next&rarr;</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{%endblock%}

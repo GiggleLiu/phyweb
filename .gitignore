@@ -1,0 +1,7 @@
+*.pyc
+*~
+*.mp4
+static/media/
+nohup.out
+*.log
+*.swp

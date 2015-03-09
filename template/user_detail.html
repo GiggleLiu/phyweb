@@ -1,0 +1,91 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block title%}{{objectbeing}}的个人主页{%endblock%}
+{%block class-nav-garden%}{%ifnotequal user objectbeing.user%}active{%endifnotequal%}{%endblock%}
+{%block content%}
+
+<div class="container">
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-12">
+            <h3 style="font-family:Arial, Helvetica, sans-serif; font-weight:bold;" class="text-muted">{{role}}</h3>
+            <h1 class="page-title">{{objectbeing}}&nbsp;({{objectbeing.user}})</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="#" class="thumbnail">
+                <img src="{%if objectbeing.face%}{{objectbeing.face.url}}{%else%}/static/img/avatar/{{objectbeing.gender}}.png{%endif%}">
+            </a>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-primary" id="panel-right">
+                <div class="panel-heading">
+                    {%ifequal objectbeing.user user%}我{%else%}{%ifequal objectbeing.gender 'male'%}他{%else%}她{%endifequal%}{%endifequal%}的基本资料
+                    {%ifequal objectbeing.user user%}
+                    <span class="badge pull-right"><span class="glyphicon glyphicon-edit"></span><a class="text-primary" data-toggle="modal" href="/being/being_update/" title="修改个人资料。">修改资料</a></span>
+                    <span class="badge pull-right" style="margin-right:7px;"><span class="glyphicon glyphicon-edit"></span><a class="text-primary" href="/being/user_update/" title="修改邮箱和密码。">修改账户</a></span>
+                    {%endifequal%}
+                    {%ifnotequal objectbeing.user user%}
+                    <span class="badge pull-right"><span class="glyphicon glyphicon-envelope"></span><a class="text-primary" title="给他站内留言" data-toggle="modal" data-target="#modal-feedback" onClick="$('#sendto').val('{{objectbeing.user.username}}')" href="#">站内留言</a></span>
+                    {%endifnotequal%}
+                </div>
+                <div class="panel-body" style="background-color:rgb(147,198,260); min-height:220px;"> 
+                    <dl class="dl-horizontal">
+                        <!--<dt>姓名</dt><dd>{{objectbeing.nickname}}</dd>-->
+                        {%if objectbeing.birthday%}
+                        <dt>生日</dt><dd>{{objectbeing.birthday|date:'Y年n月j日'}}</dd>
+                        {%endif%}
+                        <dt>性别</dt><dd>{%ifequal objectbeing.gender 'male'%}男{%else%}女{%endifequal%}</dd>
+                        <dt>邮件</dt><dd><a href="mailto:{{objectbeing.user.email}}">{{objectbeing.user.email}}</a></dd>
+                        <dt>自我介绍</dt><dd>{{objectbeing.description|default:'我很懒，什么都没写~~ > <'}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- begin of belongings -->
+    <div class="row" style="margin-top:30px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {%ifequal objectbeing.user user%}我{%else%}{%ifequal objectbeing.gender 'male'%}他{%else%}她{%endifequal%}{%endifequal%}发表的论文&nbsp;<span class="badge">{{user.paper_set.all.count}}</span>
+                {%ifequal objectbeing.user user%}
+                <span class="badge pull-right"><span class="glyphicon glyphicon-plus"></span><a class="text-primary" data-toggle="modal" href="/paper/new/" title="添加已发表论文。">添加</a></span>
+                {%endifequal%}
+            </div>
+            <div class="panel-body" style="background-color:rgb(147,198,260);">
+                <ul class="list-unstyled" style="margin-top: 10px; margin-bottom: 10px;">
+                    {%if not user.paper_set.all%}暂无文章记录{%endif%}
+                    {%for paper in user.paper_set.all%}
+                    <li>
+                        {{paper.say|safe}}
+                    </li>
+                    {%if not forloop.last%}
+                    <hr>
+                    {%endif%}
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- end of belongings -->
+    <!-- begin of feed -->
+    <div class="row" style="margin-top: 30px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">动态&nbsp;<span class="badge">{{recordlist.count}}</span></div>
+                <div class="panel-body" style="background-color:rgb(147,198,260);">
+                    <ul class="list-unstyled" style="margin-top: 10px; margin-bottom: 10px;">
+                        {%if not recordlist%}<li>暂无记录</li>{%endif%}
+                        {%for record in recordlist%}
+                        <li style="margin-top: 10px">{{record.say|safe}}</li>
+                        {%if not forloop.last%}
+                        <hr>
+                        {%endif%}
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of feed -->
+</div>
+{%endblock%}

@@ -1,0 +1,23 @@
+{%extends 'inner_base.html'%}
+{% load i18n static %}
+{%block navserver_class%}active{%endblock%}
+{%block innerpage%}
+{%block staticcontent%}{%endblock%}
+<div class="row" style="margin-top:30px;">
+    <div class="col-md-12">
+        <div class="btn-group pull-right">
+            {%if user.is_superuser%}
+            <a class="btn btn-danger" href="/essay/delete/inner/{{essay.title}}"><span class="glyphicon glyphicon-remove"></span>删除</a>
+            {%endif%}
+            {%if perms.being.can_edit_essay%}
+            <a class="btn btn-primary" href="/essay/edit/inner/{{essay.title}}"><span class="glyphicon glyphicon-edit"></span>编辑此页面</a>
+            {%endif%}
+        </div>
+    </div>
+</div>
+<div>
+    <p>{{essay.content|safe}}</p>
+    <p class="help-block"><span class="pull-right">{%if essay.author.being%}{{essay.author.being.link|safe}}{%else%}{{essay.author.username}}{%endif%}更新于{{essay.updatetime|date:'Y年m月d日'}}</span></p>
+</div>
+{%include 'comment.html'%}
+{%endblock%}

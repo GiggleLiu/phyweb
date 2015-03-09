@@ -1,0 +1,91 @@
+<!doctype html>
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block content%}
+<div class="container" style="min-height:500px;">
+    <h1>{%if update%}修改您的帐号{%else%}创建帐号{%endif%}</h1>
+	<div class="row" style="margin-top: 80px;">
+		<div class="col-sm-9">
+			<!--Begin of Basic Informatoin-->
+            <div id="update-password" class="">
+                <form class="form-horizontal" method="POST" action="{%if update%}/being/user_update/{%else%}/being/register_step1/{%endif%}">
+				<fieldset>
+                    {%if not update%}
+					<div class="form-group">
+					    <label class=" control-label col-md-3" for="username">用户名</label>
+					    <div class="col-md-8">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="用户名" value="{{user.username}}">
+					    </div>
+                    </div>
+                    {%endif%}
+
+                    {%if update%}
+					<div class="form-group">
+					    <label class=" control-label col-md-3" for="old-passwd1">原密码</label>
+					    <div class="col-md-8">
+					    	<input type="password" class="form-control" id="old-passwd1" placeholder="密码" required name="oldpassword">
+					    </div>
+					</div>
+                    {%endif%}
+					<div class="form-group">
+                        <label class=" control-label col-md-3" for="passwd1">{%if update%}新{%endif%}密码</label>
+					    <div class="col-md-8">
+					    	<input type="password" class="form-control" id="passwd1" placeholder="密码" required name="password">
+					    </div>
+					</div>
+					
+					<div class="form-group">
+					    <label class=" control-label col-md-3" for="passwd2">重复密码</label>
+					    <div class="col-md-8">
+					    	<input type="password" class="form-control" id="passwd2" placeholder="重复密码" required>
+					    </div>
+					</div>
+                    <p id="p-alert" class="help-block"></p>
+			        <div class="form-group">
+			            <label class=" control-label col-md-3" for="email">邮箱</label>
+			            <div class="col-md-8">
+                            <input type="email" class="form-control" placeholder="邮箱" id="email" title="邮箱" name="email" value="{{user.email}}">
+			        	</div>
+			        </div>
+					
+					<!--<div class="form-group">
+					    <div class="col-md-offset-3 col-md-8">
+							<button class="btn btn-default">发送邮箱验证</button>
+					    </div>
+                    </div>-->
+			        <div class="form-group">
+			        	<div class="col-md-offset-3 col-md-8">
+                            {%if update%}
+                            <a href="/being/user_detail/{{user.id}}" class="btn btn-default">取消</a>
+                            {%else%}
+                            <a href="/" class="btn btn-default">取消</a>
+                            {%endif%}
+                            <button type="submit" class="btn btn-primary">{%if update%}保存更改{%else%}保存并继续填写资料{%endif%}</button>
+			            </div>
+			        </div>
+                    {%if update%}
+			        <div class="form-group">
+			        	<div class="col-md-offset-3 col-md-8">
+                            <a href="#" class="text-danger" id="delete_user">永久删除该帐号</a>
+			            </div>
+			        </div>
+                    {%endif%}
+				</fieldset>
+			</form>
+            <script>
+                $('#form-password').on('submit',function(){
+                    if($('#passwd1').val()!=$('#passwd2').val()){
+                    $('#p-alert').text('密码不一致，请检查。');
+                    return false;}
+                });
+                $('#delete_user').on('click',function(){
+                    if(confirm('警告！删除的帐号将永远无法被恢复！请慎重。')){
+                        window.location.href='/being/delete/';
+                    }
+                });
+            </script>
+            </div>
+		</div>
+	</div>
+</div>
+{%endblock%}

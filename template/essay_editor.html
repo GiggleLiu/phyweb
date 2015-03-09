@@ -1,0 +1,23 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block class-nav-topic%}active{%endblock%}
+{%block content%}
+<div class="container" style="min-height:600px;">
+    <h1 class="page-title">{{topic.title}} - {{essay.title|default:"New Article"}}</h1>
+    <div class="row" style="margin-top:50px;">
+    {%if update%}
+        {%if essay.content_type == 'latex'%}
+        {%include 'latex.html'%}
+        {%else%}
+        {%include 'ckeditor.html'%}
+        {%endif%}
+    {%else%}
+        {%if content_type == 'latex'%}
+        {%include 'latex.html'%}
+        {%else%}
+        {%include 'ckeditor.html'%}
+        {%endif%}
+    {%endif%}
+    </div>
+</div>
+{%endblock%}

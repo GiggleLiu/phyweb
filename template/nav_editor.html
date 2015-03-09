@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% load i18n static %}
+{%block class-nav-new%}active{%endblock%}
+{%block title%}添加新的导航页面{%endblock%}
+{%block content%}
+    <div class="container" style="min-height:500px;">
+        <h1 class="page-title shake">{%if update%}更新{{essay}}{%else%}添加新的导航页面{%endif%}</h1>
+        <div class="row" style="margin-top:0px;">
+{%if content_type == 'latex'%}
+{%include 'latex.html'%}
+{%else%}
+{%include 'ckeditor.html'%}
+{%endif%}
+        </div>
+    </div>
+</div>
+{%endblock%}

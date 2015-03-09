@@ -1,0 +1,63 @@
+
+{%extends 'base.html'%}
+{% load i18n static %}
+
+{%block title%}{%if not update%}添加论文{%else%}修改论文 - {{paper}}{%endif%}{%endblock%}
+{%block content%}
+<div class="container" style="min-height:600px;">
+	<div class="row" style="margin-top:0px;">
+        <div class="col-md-9 col-xs-12">
+            <h1>{%if not update%}添加论文{%else%}修改论文{%endif%}</h1>
+            <form role="form" class="modal-form" id="form-add" method="POST" action="{%if update%}/paper/update/{{paper.id}}/{%else%}/paper/new/{%endif%}">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" placeholder="eg. Impurity resonance states in electron-doped high-T_c superconductors" name='title' required value="{{paper.title}}">
+                </div>
+                <div class="form-group">
+                    <label for="author">Authors</label>
+                    <input type="text" class="form-control" id="author" placeholder="eg. Yuan Wan, Hai-Dong Lü, Hong-Yan Lu, and Qiang-Hua Wang" name='author' required value="{{paper.author}}">
+                </div>
+                <div class="form-group">
+                    <label for="journal">Journal, Volume.</label>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <input class="form-control" id="journal" name="journal" value="{{paper.journal}}" placeholder="eg. PRB" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control" id="volume" name="volume" value="{{paper.volume}}" placeholder="eg. 77,064515">
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Abstract</label>
+                    <textarea class="form-control" id="description" placeholder="eg. Two scenarios, i.e., the anisotropic s-wave pairing (the s-wave scenario) and the d-wave pairing coexisting with antiferromagnetism (the coexisting scenario), have been introduced to understand some of seemingly s-wave-like behaviors in electron-doped cuprates. We consider the electronic structure in the presence of a nonmagnetic impurity in the coexistence scenario. We find that even if the antiferromagnetic order opens a full gap in quasiparticle excitation spectra, the midgap resonant peaks in local density of states around an impurity can still be observed in the presence of a d-wave pairing gap. The features of the impurity states in the coexisting phase are markedly different from the pure antiferromagnetic or pure d-wave pairing phases, showing the unique role of the coexisting antiferromagnetic and d-wave pairing orders. On the other hand, it is known that in the pure s-wave case, no midgap states can be induced by a nonmagnetic impurity. Therefore, we propose that the response to a nonmagnetic impurity can be used to differentiate the two scenarios." name="description" required>{{paper.description}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pubyear">Published in Year</label>
+                    <input type="text" class="form-control" id="pubyear" name="pubyear" value="{{paper.pubyear}}" placeholder="eg. 2014" required>
+                </div>
+ 
+                <div class="form-group">
+                    <label for="link">DOI(Or a Link to Your Paper)</label>
+                  	<div class="form-group">
+                        <input type="url" class="form-control" id="link" name="link" value="{{paper.link}}" placeholder="eg. http://dx.doi.org/10.1103/PhysRevB.77.064515" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-9">
+                        <a href="{%if update%}/paper/detail/{{paper.id}}/{%else%}/being/user_detail/{{user.id}}{%endif%}" class="btn btn-default">取消</a>
+                        <button type="submit" class="btn btn-primary" id="submit-add">{%if update%}完成修改{%else%}提交{%endif%}</button>
+                    </div>
+                </div>
+            </form>
+ 
+            <script>
+                $('#form-add').on('submit',function(){
+                    datedata=$('#pubyear').val();
+                    if(!isvalidyear(datedata)){alert('您的年份输入有误！'+datedata);return false;}
+                })
+            </script>
+    	</div>
+  	</div>
+</div>
+{%endblock%}
